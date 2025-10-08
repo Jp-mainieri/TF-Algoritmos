@@ -37,6 +37,15 @@ void CadastroLivros(Biblioteca *b) {
     }while(b->qLivros + qCadastro > 100);
     
     for (int i = b->qLivros; i < b->qLivros + qCadastro ; i++){
+        int idCadastro;
+        printf("Digite o ID do livro: ");
+        scanf("%d",&b->livros[i].id);
+        for (int j = 0; j < b->qLivros; j++){
+            if(b->livros[i].id == b->livros[j].id){
+                printf("Ja existe um livro com esse codigo, retornando...");
+                return;
+            }
+        }
         printf("Digite o titulo do Livro: ");
         scanf(" %[^\n]", b->livros[i].titulo);
         printf("Digite o nome do autor do Livro: ");
@@ -45,7 +54,12 @@ void CadastroLivros(Biblioteca *b) {
         scanf(" %d", &b->livros[i].anoPublicacao);
         printf("Digite a quantidade disponivel do Livro: ");
         scanf(" %d", &b->livros[i].quantidadeDisponivel);
+        b->qlivros++;
     }
+}
+
+void ConsultarLivros(Biblioteca *b) {
+
 }
 
 int main(){
