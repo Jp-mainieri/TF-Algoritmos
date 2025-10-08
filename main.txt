@@ -16,9 +16,40 @@ typedef struct{
 }Livro;
 
 typedef struct{
-    Livro livros[100];
+    Livro livros[99];
+    int qLivros;
 }Biblioteca;
 
-void CadastroLivros() {
+void CadastroLivros(Biblioteca *b) {
+    printf("%d",b->qLivros);
+    if (b->qLivros == 100) {
+        printf("Nao tem como cadastrar mais livros nesta Biblioteca");
+        return;
+    }
+    int qCadastro;
     
+    do{
+        printf("Digite quantos livros voce deseja cadastrar: ");
+        scanf("%d",&qCadastro);
+        if (b->qLivros + qCadastro > 100){
+            printf("Quantidade de livros a cadastrar ultrapassa o limite da Biblioteca");
+        }
+    }while(b->qLivros + qCadastro > 100);
+    
+    for (int i = b->qLivros; i < b->qLivros + qCadastro ; i++){
+        printf("Digite o titulo do Livro: ");
+        scanf(" %[^\n]", b->livros[i].titulo);
+        printf("Digite o nome do autor do Livro: ");
+        scanf(" %[^\n]", b->livros[i].autor);
+        printf("Digite o ano de publicacao do Livro: ");
+        scanf(" %d", &b->livros[i].anoPublicacao);
+        printf("Digite a quantidade disponivel do Livro: ");
+        scanf(" %d", &b->livros[i].quantidadeDisponivel);
+    }
+}
+
+int main(){
+    Biblioteca bibi = {0};
+    CadastroLivros(&bibi);
+ return 0;   
 }
