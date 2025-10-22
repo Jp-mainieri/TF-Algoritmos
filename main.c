@@ -54,7 +54,8 @@ void CadastroLivros(Biblioteca *b) {
         scanf(" %d", &b->livros[i].anoPublicacao);
         printf("Digite a quantidade disponivel do Livro: ");
         scanf(" %d", &b->livros[i].quantidadeDisponivel);
-        b->qlivros++;
+        printf("==============================");
+        b->qLivros++;
     }
 }
 
