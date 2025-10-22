@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 
 typedef struct{
     char nome[100];
@@ -6,7 +7,7 @@ typedef struct{
 }Pessoa;
 
 typedef struct{
-    int id;
+    char id[20];
     char titulo[100];
     char autor[100];
     int anoPublicacao;
@@ -16,7 +17,7 @@ typedef struct{
 }Livro;
 
 typedef struct{
-    Livro livros[99];
+    Livro livros[100];
     int qLivros;
 }Biblioteca;
 
@@ -32,16 +33,19 @@ void CadastroLivros(Biblioteca *b) {
         printf("Digite quantos livros voce deseja cadastrar: ");
         scanf("%d",&qCadastro);
         if (b->qLivros + qCadastro > 100){
-            printf("Quantidade de livros a cadastrar ultrapassa o limite da Biblioteca");
+            printf("Quantidade de livros para cadastrar ultrapassa o limite da Biblioteca");
         }
     }while(b->qLivros + qCadastro > 100);
-    
-    for (int i = b->qLivros; i < b->qLivros + qCadastro ; i++){
+
+    const int inicioCadastro = b->qLivros;
+    const int finalCadastro = b->qLivros + qCadastro;
+
+    for (int i = inicioCadastro; i < finalCadastro; i++){
         int idCadastro;
         printf("Digite o ID do livro: ");
         scanf("%d",&b->livros[i].id);
         for (int j = 0; j < b->qLivros; j++){
-            if(b->livros[i].id == b->livros[j].id){
+            if(strcmp(b->livros[i].id,b->livros[j].id) == 0){
                 printf("Ja existe um livro com esse codigo, retornando...");
                 return;
             }
@@ -64,7 +68,7 @@ void ConsultarLivros(Biblioteca *b) {
 }
 
 int main(){
-    Biblioteca bibi = {0};
-    CadastroLivros(&bibi);
+    Biblioteca novaBiblioteca = {0};
+    CadastroLivros(&novaBiblioteca);
  return 0;   
 }
