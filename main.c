@@ -164,11 +164,7 @@ void emprestarLivro(Biblioteca* b)
     for (int i = 0; i < 11; i++){
         if (livroEmprestimo->pessoasEmprestimos[i] == NULL){
             Pessoa* p = malloc(sizeof(Pessoa));
-            if (!p){
-                printf("Erro de memória ao alocar empréstimo.\n");
-                return;
-            }
-            *p = pessoaEmprestimo; // copia os dados
+            *p = pessoaEmprestimo;
             livroEmprestimo->pessoasEmprestimos[i] = p;
             livroEmprestimo->contadorEmprestimos++;
             livroEmprestimo->quantidadeDisponivel--;
