@@ -51,18 +51,20 @@ void cadastroLivros(Biblioteca* b) {
         printf("Digite o ID do livro: ");
         scanf("%19s",idCadastro);
         // Verifica duplicidade comparando o id informado com os já cadastrados
-        for (int j = 0; j < b->qLivros; j++){
-            if(strcmp(idCadastro, b->livros[j].id) == 0){
-                printf("Ja existe um livro com esse codigo, retornando...\n");
-                break; // não cadastra este livro, mas continua para a próxima iteração
+        bool idDuplicado = false;
+        for (int j = 0; j < b->qLivros; j++) {
+            if (strcmp(idCadastro, b->livros[j].id) == 0) {
+                printf("Já existe um livro com esse código. Cadastro ignorado.\n");
+                idDuplicado = true;
+                return;
             }
         }
 
         strcpy(b->livros[i].id,idCadastro);
         printf("Digite o titulo do Livro: ");
-        scanf(" %99[^\n]", b->livros[i].titulo);
+        scanf(" %[^\n]", b->livros[i].titulo);
         printf("Digite o nome do autor do Livro: ");
-        scanf(" %99[^\n]", b->livros[i].autor);
+        scanf(" %[^\n]", b->livros[i].autor);
         printf("Digite o ano de publicacao do Livro: ");
         scanf(" %d", &b->livros[i].anoPublicacao);
         printf("Digite a quantidade disponivel do Livro (max 10): ");
@@ -218,17 +220,61 @@ void devolverLivro(Biblioteca* b)
 }
 //Remoção de livros
 void removerLivro(Biblioteca* b){
-    
+    Livro* livroRemover = consultarLivrosSearchId(b);
+    if (livroRemover == NULL) return;
+    int posicaoBiblioteca = -1;
+    for (int i = 0; i < b->qLivros - 1; i++){ 
+        if (strcmp(b->livros[i].id,livroRemover->id) == 0){
+            posicaoBiblioteca = i;
+        }
+    }
+    if (posicaoBiblioteca == -1) {
+        printf("Livro não encontrado na biblioteca.\n");
+        return;
+    }
+
+    for (int j = 0; j < 11; j++) {
+        if (b->livros[posicaoBiblioteca].pessoasEmprestimos[j] != NULL) {
+            free(b->livros[posicaoBiblioteca].pessoasEmprestimos[j]);
+            b->livros[posicaoBiblioteca].pessoasEmprestimos[j] = NULL;
+        }
+    }
+
+    for (int k = posicaoBiblioteca; k < b->qLivros; k++) b->livros[k] = b->livros[k+1];
+
+    b->qLivros--;
 }
 
 
 // Menu
+void menu(Biblioteca* b) {
+    int opcao;
 
+    do {
+        printf("\n======= SISTEMA DE BIBLIOTECA =======\n");
+        printf("1 - Cadastrar livro\n");
+        printf("2 - Consultar livros\n");
+        printf("3 - Emprestar livro\n");
+        printf("4 - Devolver livro\n");
+        printf("5 - Remover livro\n");
+        printf("0 - Sair\n");
+        printf("Escolha: ");
+        scanf("%d", &opcao);
+
+        switch (opcao) {
+            case 1: cadastroLivros(&b); break;
+            case 2: consultarLivros(&b); break;
+            case 3: emprestarLivro(&b); break;
+            case 4: devolverLivro(&b); break;
+            case 5: removerLivro(&b); break;
+            case 0: printf("Encerrando o sistema...\n"); break;
+            default: printf("Opção inválida.\n");
+        }
+    } while (opcao != 0);
+}
 
 int main(){
     Biblioteca novaBiblioteca = {0};
-    cadastroLivros(&novaBiblioteca);
-    consultarLivros(&novaBiblioteca);
-    emprestarLivro(&novaBiblioteca);
- return 0;   
+    menu(&novaBiblioteca);
+    return 0;   
 }
