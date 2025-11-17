@@ -28,7 +28,6 @@ typedef struct{
 // Cadastrar Livros
 
 void cadastroLivros(Biblioteca* b) {
-    printf("%d",b->qLivros);
     if (b->qLivros == 100) {
         printf("Nao tem como cadastrar mais livros nesta Biblioteca\n");
         return;
@@ -192,12 +191,12 @@ void devolverLivro(Biblioteca* b)
         char pesquisaCliente[100];
         bool encontrouCliente = false;
         int idCliente = 0;
-        printf("Que cliente está devolvendo o livro?");
+        printf("Qual o cpf do cliente que está devolvendo o livro?");
         scanf("%s", pesquisaCliente);
         for (idCliente = 0; idCliente < 11; idCliente++)
         {
             if (livroDevolucao->pessoasEmprestimos[idCliente] == NULL) continue;
-            if (strcmp(pesquisaCliente,livroDevolucao->pessoasEmprestimos[idCliente]->nome) == 0)
+            if (strcmp(pesquisaCliente,livroDevolucao->pessoasEmprestimos[idCliente]->cpf) == 0)
             {
                 encontrouCliente = true;
                 break;
@@ -223,13 +222,13 @@ void removerLivro(Biblioteca* b){
     Livro* livroRemover = consultarLivrosSearchId(b);
     if (livroRemover == NULL) return;
     int posicaoBiblioteca = -1;
-    for (int i = 0; i < b->qLivros - 1; i++){ 
+    for (int i = 0; i < b->qLivros; i++){
         if (strcmp(b->livros[i].id,livroRemover->id) == 0){
             posicaoBiblioteca = i;
         }
     }
     if (posicaoBiblioteca == -1) {
-        printf("Livro não encontrado na biblioteca.\n");
+        printf("Não foi possível remover este livro da biblioteca.\n");
         return;
     }
 
@@ -240,7 +239,7 @@ void removerLivro(Biblioteca* b){
         }
     }
 
-    for (int k = posicaoBiblioteca; k < b->qLivros; k++) b->livros[k] = b->livros[k+1];
+    for (int k = posicaoBiblioteca; k < b->qLivros - 1; k++) b->livros[k] = b->livros[k+1];
 
     b->qLivros--;
 }
@@ -262,11 +261,11 @@ void menu(Biblioteca* b) {
         scanf("%d", &opcao);
 
         switch (opcao) {
-            case 1: cadastroLivros(&b); break;
-            case 2: consultarLivros(&b); break;
-            case 3: emprestarLivro(&b); break;
-            case 4: devolverLivro(&b); break;
-            case 5: removerLivro(&b); break;
+            case 1: cadastroLivros(b); break;
+            case 2: consultarLivros(b); break;
+            case 3: emprestarLivro(b); break;
+            case 4: devolverLivro(b); break;
+            case 5: removerLivro(b); break;
             case 0: printf("Encerrando o sistema...\n"); break;
             default: printf("Opção inválida.\n");
         }
